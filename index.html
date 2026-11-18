@@ -235,6 +235,7 @@ footer .logoimg{height:22px}
       <a href="#avaliacoes">Avaliações</a>
       <a href="#armacoes">Armações</a>
       <a href="/medidas">Medidas</a>
+      <a href="/visagismo">Visagismo</a>
       <a href="#duvidas">Dúvidas</a>
       <a href="#loja">Como chegar</a>
     </nav>
@@ -477,6 +478,7 @@ function track(e){
   if(a.hasAttribute("data-wa"))gtag("event","whatsapp_click",{link_text:txt});
   else if(h.indexOf("tel:")===0)gtag("event","ligar_click",{link_text:txt});
   else if(h==="/medidas")gtag("event","abrir_medidas",{link_text:txt});
+  else if(h==="/visagismo")gtag("event","abrir_visagismo",{link_text:txt});
 }
 function load(){
   if(loaded)return;loaded=true;
