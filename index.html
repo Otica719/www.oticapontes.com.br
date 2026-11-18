@@ -64,7 +64,7 @@ header{position:sticky;top:env(safe-area-inset-top,0px);z-index:19;background:co
 .visit .btn.wa:hover{background:#D9D9D6;border-color:#D9D9D6}
 .btn svg{width:18px;height:18px;flex:none}
 a:focus-visible,summary:focus-visible{outline:2px solid var(--tortoise);outline-offset:3px}
-@media (max-width:860px){.links{display:none}.nav .btn{padding:10px 16px;font-size:13px}}
+@media (max-width:860px){.links{gap:0}.links a:not(.k-med){display:none}.links .k-med{color:var(--ink);font-weight:500;padding:10px 12px}.nav .btn{padding:10px 16px;font-size:13px}}
 
 /* fotos */
 .photo{background:var(--slot);position:relative;overflow:hidden;max-width:100%}
@@ -196,6 +196,7 @@ footer .logoimg{height:22px}
       <a href="#quem">Quem atende</a>
       <a href="#avaliacoes">Avaliações</a>
       <a href="#armacoes">Armações</a>
+      <a class="k-med" href="/medidas">Medidas</a>
       <a href="#duvidas">Dúvidas</a>
       <a href="#loja">Como chegar</a>
     </nav>
