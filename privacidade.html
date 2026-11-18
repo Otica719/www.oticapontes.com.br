@@ -46,7 +46,7 @@ footer{border-top:1px solid var(--line);padding-block:20px 32px;font-size:13px;c
 <h2>2. Quais dados tratamos</h2>
 <div class="tw"><table>
 <tr><th>Situação</th><th>Dados</th><th>Finalidade</th></tr>
-
+<tr><td>Navegação no site (somente se você aceitar os cookies)</td><td>Páginas visitadas, tipo de aparelho e navegador, origem da visita, região aproximada</td><td>Entender como o site é usado e melhorar o atendimento</td></tr>
 <tr><td>Conversa pelo WhatsApp</td><td>Nome, telefone e o conteúdo das mensagens</td><td>Responder, agendar avaliação ou exame de vista e atender o pedido</td></tr>
 <tr><td>Medidas pelo celular</td><td>Nome, telefone (opcional), foto do rosto com um cartão de banco como escala e o resultado das medidas</td><td>Calcular a distância entre as pupilas e a altura de montagem para fazer as suas lentes</td></tr>
 </table></div>
@@ -54,14 +54,14 @@ footer{border-top:1px solid var(--line);padding-block:20px 32px;font-size:13px;c
 
 <h2>3. Base legal</h2>
 <ul>
-<li><strong>Consentimento</strong> (art. 7º, I): envio da sua foto pela página de medidas. Você pode retirar o consentimento quando quiser.</li>
+<li><strong>Consentimento</strong> (art. 7º, I): cookies de estatística e envio da sua foto pela página de medidas. Você pode recusar os cookies e usar o site normalmente, e pode retirar o consentimento quando quiser.</li>
 <li><strong>Procedimentos preliminares ligados a um contrato</strong> (art. 7º, V): atendimento, orçamento e confecção dos óculos que você pediu.</li>
 </ul>
 
 <h2>4. Com quem compartilhamos</h2>
 <p>Usamos prestadores que tratam dados em nosso nome:</p>
 <ul>
-
+<li><strong>Google Analytics</strong>, para estatísticas do site, apenas se você aceitar os cookies.</li>
 <li><strong>Supabase</strong>, para guardar as medidas e as fotos enviadas pela página de medidas, em área privada com acesso restrito por login. Os servidores podem estar fora do Brasil.</li>
 <li><strong>Cloudflare e GitHub</strong>, para hospedar o painel interno e o site.</li>
 <li><strong>WhatsApp (Meta)</strong>, quando você nos chama por lá.</li>
@@ -69,13 +69,13 @@ footer{border-top:1px solid var(--line);padding-block:20px 32px;font-size:13px;c
 <p>Alguns desses serviços operam fora do Brasil, o que caracteriza transferência internacional de dados (art. 33 da LGPD), feita com contratos e garantias dos próprios provedores. Não vendemos nem cedemos seus dados para publicidade de terceiros.</p>
 
 <h2>5. Por quanto tempo guardamos</h2>
-<p>Fotos e medidas ficam guardadas apenas pelo tempo necessário para o atendimento. Você pode pedir a exclusão a qualquer momento. Dados de conversa no WhatsApp seguem o histórico da própria conversa.</p>
+<p>Fotos e medidas ficam guardadas apenas pelo tempo necessário para o atendimento. Você pode pedir a exclusão a qualquer momento. Dados de conversa no WhatsApp seguem o histórico da própria conversa. As estatísticas do Google Analytics seguem o prazo de retenção configurado na conta, de no máximo 14 meses.</p>
 
 <h2>6. Seus direitos</h2>
 <p>Pelo art. 18 da LGPD você pode pedir a qualquer momento: confirmação de que tratamos seus dados, acesso, correção, anonimização ou exclusão, portabilidade, informação sobre com quem compartilhamos e a revogação do consentimento. Basta chamar a loja pelo WhatsApp <a href="tel:+5511993087205">(11) 99308-7205</a>. Também é possível reclamar à Autoridade Nacional de Proteção de Dados (ANPD).</p>
 
 <h2>7. Cookies</h2>
-<p>O site não usa cookies de rastreamento nem de publicidade. Se isso mudar, avisaremos aqui e pediremos o seu consentimento.</p>
+<p>O site só usa cookies de estatística do Google Analytics, e somente depois do seu aceite no aviso que aparece na primeira visita. Se recusar, nenhum cookie de estatística é gravado. Para mudar a escolha, use o link “Cookies” no rodapé do site. Também é possível apagar os cookies pelas configurações do navegador.</p>
 
 <h2>8. Segurança</h2>
 <p>As fotos ficam em armazenamento privado, e só quem tem login na loja consegue vê-las. Mesmo assim, nenhum sistema é totalmente livre de risco, e, se houver incidente que possa afetar você, avisaremos nos termos da lei.</p>
@@ -97,7 +97,7 @@ footer{border-top:1px solid var(--line);padding-block:20px 32px;font-size:13px;c
 </style>
 <script>
 (function(){
-var GA="",KEY="pontes-cookies";
+var GA="G-MER9N6MSJB",KEY="pontes-cookies";
 if(!GA)return;
 function get(){try{return localStorage.getItem(KEY)}catch(e){return null}}
 function set(v){try{localStorage.setItem(KEY,v)}catch(e){}}
