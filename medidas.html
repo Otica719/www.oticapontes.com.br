@@ -25,6 +25,7 @@
 <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <meta name="theme-color" content="#151515">
+<meta name="google-site-verification" content="1pOKMXp5L4l8UrOwrefJi3XDerpWWO1CNr6FhU4x_B0">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Jost:wght@300;400;500;600&family=Inter:wght@300;400;500;600&display=swap">
 <style>
 :root{
@@ -115,6 +116,11 @@ input[type=text],input[type=tel]{font:400 1rem var(--f-ui);background:var(--bg);
 .g-eyes{position:absolute;left:4%;right:4%;top:46%;border-top:1px dashed rgba(255,255,255,.8)}
 .g-eyes span{position:absolute;right:0;top:-1.5em;font:500 .72rem "IBM Plex Mono",monospace;color:#fff;text-shadow:0 1px 3px #000}
 .count{position:absolute;inset:0;display:grid;place-items:center;font:600 min(34vw,9rem) "IBM Plex Mono",monospace;color:#fff;text-shadow:0 2px 24px rgba(0,0,0,.7);pointer-events:none}
+.camov{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.gate{position:absolute;left:50%;bottom:12px;transform:translateX(-50%);max-width:92%;padding:9px 18px;border-radius:99px;font:600 .95rem var(--f-ui);background:#c0392b;color:#fff;text-align:center;box-shadow:0 2px 12px rgba(0,0,0,.45)}
+.gate.ok{background:#1e9e5a}.gate.off{background:rgba(0,0,0,.65)}
+.cam.auto .g-eyes{display:none}
+.shutter[aria-disabled="true"]{opacity:.3}
 .flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none;transition:opacity .35s}
 .flash.on{opacity:.9;transition:none}
 .cerr{position:absolute;inset:0;display:grid;place-items:center;padding:28px;text-align:center;font-size:1rem;background:#000;color:#fff}
@@ -366,14 +372,16 @@ body{background:#ffffff}
   <div class="cstage">
     <video id="vid" playsinline muted></video>
     <div class="guide" aria-hidden="true"><div class="g-oval"></div><div class="g-card">CARTÃO</div><div class="g-eyes"><span>olhos aqui</span></div></div>
+    <canvas class="camov" id="camOv"></canvas><div class="gate off" id="gate" role="status" aria-live="polite">Preparando a câmera…</div>
     <div class="count" id="count" hidden></div><div class="flash" id="flash"></div>
     <div class="cerr" id="camErr" hidden><p id="camErrT"></p></div>
   </div>
-  <p class="camtext" style="padding-top:10px">Encaixe o rosto no contorno, o cartão no retângulo e olhe para a lente.</p>
+  <p class="camtext" style="padding-top:10px">Outra pessoa segura o aparelho a cerca de 70 cm. Encaixe o rosto no contorno, o cartão na testa e olhe para a lente. A foto só é liberada com a luz verde.</p>
   <div class="camctl">
     <button class="pill" id="camTimer" type="button" aria-pressed="true">Temporizador 5 s</button>
     <button class="shutter" id="camShot" type="button" aria-label="Tirar foto"></button>
     <button class="pill" id="camFlip" type="button">Virar câmera</button>
+    <button class="pill" id="camCal" type="button" hidden>Calibrar 70 cm</button>
   </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js" onerror="void 0"></script>
@@ -538,7 +546,7 @@ function camErr(t){$("camErrT").textContent=t;$("camErr").hidden=false}
 function startStream(){
   stopStream();$("camErr").hidden=true;
   navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:facing},width:{ideal:1920},height:{ideal:1920}},audio:false}).then(function(s){
-    stream=s;var v=$("vid");v.srcObject=s;v.classList.toggle("mirror",facing==="user");return v.play();
+    stream=s;var v=$("vid");v.srcObject=s;v.classList.toggle("mirror",facing==="user");return v.play().then(startDetect);
   }).catch(function(e){
     camErr(e&&e.name==="NotAllowedError"?"A câmera foi bloqueada. Permita o acesso à câmera nas configurações do navegador, ou use o botão \"Escolher da galeria\".":"Não foi possível abrir a câmera neste aparelho. Use o botão \"Escolher da galeria\".");
   });
@@ -547,7 +555,7 @@ function openCam(){
   if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia||!window.isSecureContext){$("inCam").click();return}
   $("cam").hidden=false;document.body.style.overflow="hidden";startStream();
 }
-function closeCam(){cancelCount();stopStream();$("cam").hidden=true;document.body.style.overflow=""}
+function closeCam(){stopDetect();cancelCount();stopStream();$("cam").hidden=true;document.body.style.overflow=""}
 $("btnCam").addEventListener("click",openCam);
 $("camClose").addEventListener("click",closeCam);
 document.addEventListener("keydown",function(e){if(e.key==="Escape"&&!$("cam").hidden)closeCam()});
@@ -556,6 +564,7 @@ $("camTimer").addEventListener("click",function(){timerOn=!timerOn;$("camTimer")
 function cancelCount(){if(counting){clearInterval(counting);counting=null}$("count").hidden=true;$("camShot").classList.remove("busy")}
 function capture(){
   var v=$("vid");if(!v.videoWidth)return;
+  window.__capMeta={dist:G.dist,tilt:G.tilt,mode:G.mode,ok:G.ok,t:Date.now()};
   var k=Math.min(1,2400/Math.max(v.videoWidth,v.videoHeight)),c=document.createElement("canvas");
   c.width=Math.round(v.videoWidth*k);c.height=Math.round(v.videoHeight*k);
   c.getContext("2d").drawImage(v,0,0,c.width,c.height);   /* sem espelhar: a pupila direita fica do lado esquerdo da foto */
@@ -565,10 +574,82 @@ function capture(){
 $("camShot").addEventListener("click",function(){
   if(counting){cancelCount();return}
   if(!stream)return;
+  if(G.mode==="auto"&&!G.ok){shake();return}
   if(!timerOn){capture();return}
   var n=5;$("camShot").classList.add("busy");$("count").hidden=false;$("count").textContent=n;
   counting=setInterval(function(){n--;if(n<=0){cancelCount();capture()}else{$("count").textContent=n}},1000);
 });
+
+/* ---- verificação ao vivo: distância (60–80 cm), linha nas pupilas e rosto centralizado ---- */
+var FA="https://cdn.jsdelivr.net/npm/@vladmandic/face-api@1.7.12/",faP=null,detT=null,G={mode:"load",ok:false,dist:null,tilt:null,raw:null};
+var DMIN=60,DMAX=80,TMAX=2,FACEW=140;               /* cm, graus, mm entre os pontos 0 e 16 do rosto */
+function lsg(k,v){try{if(v===undefined)return JSON.parse(localStorage.getItem(k)||"null");localStorage.setItem(k,JSON.stringify(v))}catch(e){return null}}
+function calGet(){var c=lsg("pontes-cal-"+facing);return (typeof c==="number"&&c>.5&&c<2)?c:1}
+function loadFA(){
+  if(faP)return faP;
+  faP=new Promise(function(ok,no){
+    var t=setTimeout(function(){no("tempo")},20000),sc=document.createElement("script");sc.src=FA+"dist/face-api.js";
+    sc.onload=function(){var f=window.faceapi;if(!f){clearTimeout(t);return no("lib")}
+      Promise.all([f.nets.tinyFaceDetector.loadFromUri(FA+"model/"),f.nets.faceLandmark68Net.loadFromUri(FA+"model/")]).then(function(){clearTimeout(t);ok(f)},function(e){clearTimeout(t);no(e)})};
+    sc.onerror=function(){clearTimeout(t);no("rede")};document.head.appendChild(sc);
+  });
+  faP.catch(function(){faP=null});
+  return faP;
+}
+function focalPx(vw,vh){var L=Math.max(vw,vh),h=(facing==="user"?62:66)*Math.PI/180;return L/(2*Math.tan(h/2))}
+/* L = 68 pontos [{x,y}] em pixels do vídeo. Pura, para poder testar. */
+function evalGate(L,vw,vh){
+  function mid(a,b){var x=0,y=0,n=0;for(var i=a;i<=b;i++){x+=L[i].x;y+=L[i].y;n++}return{x:x/n,y:y/n}}
+  var e1=mid(36,41),e2=mid(42,47),Lf=L[0],Rf=L[16],w=Math.hypot(Rf.x-Lf.x,Rf.y-Lf.y);
+  var raw=focalPx(vw,vh)*FACEW/w/10,dist=raw*calGet();
+  var a=(e1.x<e2.x)?[e1,e2]:[e2,e1],tilt=Math.atan2(a[1].y-a[0].y,a[1].x-a[0].x)*180/Math.PI;
+  var cx=(Lf.x+Rf.x)/2/vw,msg,ok=false;
+  if(dist<DMIN)msg="Muito perto: "+Math.round(dist)+" cm. Afaste até 70 cm";
+  else if(dist>DMAX)msg="Muito longe: "+Math.round(dist)+" cm. Aproxime até 70 cm";
+  else if(Math.abs(tilt)>TMAX)msg="Nivele o aparelho: a linha precisa ficar reta nas pupilas";
+  else if(Math.abs(cx-.5)>.12)msg="Centralize o rosto no contorno";
+  else{ok=true;msg="Posição certa: "+Math.round(dist)+" cm"}
+  return{ok:ok,msg:msg,dist:dist,raw:raw,tilt:tilt,e1:e1,e2:e2};
+}
+function setGate(txt,cls){var g=$("gate");g.textContent=txt;g.className="gate "+(cls||"")}
+function shake(){var g=$("gate");g.animate&&g.animate([{transform:"translateX(-50%) scale(1)"},{transform:"translateX(-50%) scale(1.08)"},{transform:"translateX(-50%) scale(1)"}],{duration:260})}
+function drawOv(r,vw,vh){
+  var c=$("camOv"),st=c.parentNode,cw=st.clientWidth,ch=st.clientHeight;if(c.width!==cw||c.height!==ch){c.width=cw;c.height=ch}
+  var x=c.getContext("2d");x.clearRect(0,0,cw,ch);if(!r)return;
+  var sc=Math.max(cw/vw,ch/vh),dx=(cw-vw*sc)/2,dy=(ch-vh*sc)/2,mir=facing==="user";
+  function P(p){var X=p.x*sc+dx;return{x:mir?cw-X:X,y:p.y*sc+dy}}
+  var a=P(r.e1),b=P(r.e2),col=r.ok?"#3ddc84":"#ff5a4f",ang=Math.atan2(b.y-a.y,b.x-a.x),L=Math.hypot(b.x-a.x,b.y-a.y)*3.1,mx=(a.x+b.x)/2,my=(a.y+b.y)/2;
+  x.lineWidth=2.5;x.strokeStyle=col;x.beginPath();x.moveTo(mx-Math.cos(ang)*L/2,my-Math.sin(ang)*L/2);x.lineTo(mx+Math.cos(ang)*L/2,my+Math.sin(ang)*L/2);x.stroke();
+  x.setLineDash([6,6]);x.strokeStyle="rgba(255,255,255,.55)";x.beginPath();x.moveTo(mx-L/2,my);x.lineTo(mx+L/2,my);x.stroke();x.setLineDash([]);
+  [a,b].forEach(function(p){x.beginPath();x.arc(p.x,p.y,7,0,6.283);x.stroke();x.beginPath();x.moveTo(p.x-12,p.y);x.lineTo(p.x+12,p.y);x.moveTo(p.x,p.y-12);x.lineTo(p.x,p.y+12);x.stroke()});
+}
+function applyGate(r,vw,vh){
+  if(!r){G.ok=false;G.dist=null;G.tilt=null;setGate("Procurando o rosto…","");drawOv(null);if(counting)cancelCount();return}
+  G.ok=r.ok;G.dist=r.dist;G.tilt=r.tilt;G.raw=r.raw;setGate(r.msg,r.ok?"ok":"");drawOv(r,vw,vh);
+  $("camShot").setAttribute("aria-disabled",String(!r.ok));
+  if(counting&&!r.ok){cancelCount();$("camHint").textContent="Posição perdida. Ajuste e tente de novo"}
+}
+function startDetect(){
+  stopDetect();$("cam").classList.remove("auto");G.mode="load";G.ok=false;setGate("Carregando a verificação…","off");$("camShot").removeAttribute("aria-disabled");
+  loadFA().then(function(f){
+    if($("cam").hidden)return;G.mode="auto";$("cam").classList.add("auto");$("camShot").setAttribute("aria-disabled","true");setGate("Procurando o rosto…","");
+    var o=new f.TinyFaceDetectorOptions({inputSize:224,scoreThreshold:.5});
+    (function loop(){
+      if($("cam").hidden||G.mode!=="auto")return;
+      var v=$("vid");if(!v.videoWidth||v.paused){detT=setTimeout(loop,250);return}
+      f.detectSingleFace(v,o).withFaceLandmarks().then(function(d){
+        applyGate(d?evalGate(d.landmarks.positions,v.videoWidth,v.videoHeight):null,v.videoWidth,v.videoHeight);
+      }).catch(function(){}).then(function(){detT=setTimeout(loop,200)});
+    })();
+  }).catch(function(){
+    G.mode="manual";G.ok=true;$("cam").classList.remove("auto");$("camShot").removeAttribute("aria-disabled");
+    setGate("Verificação automática indisponível. Mantenha ~70 cm e a linha reta","off");
+  });
+  if(/[?&]cal=1/.test(location.search))$("camCal").hidden=false;
+}
+function stopDetect(){if(detT){clearTimeout(detT);detT=null}G.mode="off";G.ok=false;var c=$("camOv");c.getContext("2d").clearRect(0,0,c.width,c.height)}
+$("camCal").addEventListener("click",function(){if(G.raw){lsg("pontes-cal-"+facing,70/G.raw);setGate("Calibrado: fator "+(70/G.raw).toFixed(2),"ok")}else setGate("Posicione o rosto a 70 cm e tente de novo","")});
+window.__gate={eval:evalGate,G:G};
 
 /* ---- envio ---- */
 function uuid(){return (window.crypto&&crypto.randomUUID)?crypto.randomUUID():String(Date.now())+Math.random().toString(16).slice(2)}
@@ -743,6 +824,7 @@ function track(e){
   if(a.hasAttribute("data-wa"))gtag("event","whatsapp_click",{link_text:txt});
   else if(h.indexOf("tel:")===0)gtag("event","ligar_click",{link_text:txt});
   else if(h==="/medidas")gtag("event","abrir_medidas",{link_text:txt});
+  else if(h==="/visagismo")gtag("event","abrir_visagismo",{link_text:txt});
 }
 function load(){
   if(loaded)return;loaded=true;
