@@ -94,22 +94,22 @@ header::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-ins
 label.chk{display:flex;gap:10px;align-items:center;min-height:44px;font-size:15px;cursor:pointer}
 label.chk input{width:22px;height:22px;accent-color:#151515}
 /* resultado */
-.res{display:grid;grid-template-columns:minmax(0,320px) minmax(0,1fr);gap:28px;align-items:start}
+.res{display:grid;grid-template-columns:minmax(0,300px) minmax(0,1fr);gap:36px;align-items:start}
 @media(max-width:860px){.res{grid-template-columns:1fr}}
 .snap{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#000}
 .snap canvas{display:block;width:100%;height:auto}
-.card{border:1px solid var(--line);border-radius:14px;background:#fff;padding:20px;margin-bottom:18px}
+.card{border:1px solid var(--line);border-radius:14px;background:#fff;padding:26px;margin-bottom:22px}
 .card h3{font-size:22px;margin:4px 0 8px}
-.card p{margin:0 0 8px;color:var(--muted);font-size:15px}
+.card p{margin:0 0 12px;color:var(--muted);font-size:15.5px;line-height:1.6}
 .big{font-size:clamp(28px,5vw,40px);letter-spacing:-.03em;font-weight:500;text-transform:capitalize}
-.meters{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0 4px}
+.meters{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0 10px}
 .meters span{border:1px solid var(--line);border-radius:999px;padding:4px 12px;font-size:13px;color:var(--muted)}
 .skinrow{display:flex;gap:16px;align-items:center;flex-wrap:wrap;margin:6px 0 10px}
 .sw{width:64px;height:64px;border-radius:12px;border:1px solid var(--line);flex:none}
 .seg{display:inline-flex;border:1px solid var(--ink);border-radius:999px;overflow:hidden;margin:4px 8px 4px 0}
 .seg button{border:0;background:transparent;font:500 14px var(--f);min-height:44px;padding:0 16px;cursor:pointer;color:var(--ink)}
 .seg button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
-.pal{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0}
+.pal{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0 16px}
 .chip{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ink);border:1px solid var(--line);border-radius:999px;padding:5px 12px 5px 6px;background:#fff}
 .chip i{width:22px;height:22px;border-radius:50%;border:1px solid rgba(0,0,0,.18)}
 .pick{display:grid;grid-template-columns:repeat(auto-fill,minmax(112px,1fr));gap:10px;margin:12px 0}
@@ -135,12 +135,16 @@ footer{border-top:1px solid var(--line);padding-block:26px 40px;color:var(--mute
 footer .row2{display:flex;flex-wrap:wrap;gap:6px 20px;align-items:center}
 footer a{display:inline-flex;align-items:center;min-height:44px}
 .printonly,.printhead{display:none}
-.pick button svg{width:96px;height:38px;overflow:visible}
-.fshapes{grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}
+.pick button svg{width:128px;height:48px;overflow:visible;color:var(--ink)}
+.pick button svg .lens{fill:#D9E2E7;fill-opacity:.95}
+.fshapes{grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px}
+.fshapes button{padding:16px 10px;min-height:118px;gap:10px}
 .pick button .tg{font-size:11px;font-weight:500;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);min-height:13px}
 .pick button.ind{border-color:var(--ok)}.pick button.ind .tg{color:var(--ok)}
 .pick button.avd{border-color:#b24}.pick button.avd .tg{color:#b24}
 .pick button[aria-pressed="true"].ind{box-shadow:0 0 0 2px var(--ok) inset}.pick button[aria-pressed="true"].avd{box-shadow:0 0 0 2px #b24 inset}
+.skinctl .sub{margin:14px 0 4px;font-size:14px;font-weight:600;color:var(--ink)}.skinctl .sub span{font-weight:400;color:var(--muted)}
+.how2{margin:8px 0;font-size:14px;color:var(--muted)}.how2 summary{cursor:pointer;min-height:44px;display:flex;align-items:center;color:var(--ink);font-weight:500}.how2 p{margin:0 0 8px}
 .fs-h{margin:14px 0 2px;color:var(--ink)}.fs-h .note{display:block;margin:2px 0 0}
 @page{size:A4;margin:0}
 @media print{
@@ -164,7 +168,7 @@ footer a{display:inline-flex;align-items:center;min-height:44px}
  .fs-h{margin:10px 0 4px}
  .pick{grid-template-columns:repeat(4,1fr);gap:5px;margin:4px 0}
  .pick button{min-height:0;padding:5px 3px;border-width:1px;font-size:11px;gap:3px;box-shadow:none!important;background:#fff}
- .pick button svg{width:60px;height:24px}.pick button .tg{font-size:8.5px;min-height:10px}
+ .pick button svg{width:70px;height:26px}.pick button .tg{font-size:8.5px;min-height:10px}
  .pick button[aria-pressed="true"]{border-width:2px}
  .frames{grid-template-columns:repeat(4,1fr);gap:7px;margin-top:5px}.fr:nth-child(n+5){display:none}.fr .ph{aspect-ratio:3/2}.fr .tx{padding:5px 7px;font-size:10.5px}.fr .tx span{font-size:10px}
  .note{font-size:10px;margin-top:2mm}
@@ -262,9 +266,18 @@ footer a{display:inline-flex;align-items:center;min-height:44px}
      <div class="card">
       <span class="label">Cor da pele</span>
       <div class="skinrow"><div class="sw" id="rSw"></div><div><div style="font-size:20px;font-weight:500" id="rSkin"></div><div class="note" style="margin:0" id="rSkinNote"></div></div></div>
-      <div class="noprint"><span class="note" style="margin:0 0 4px;display:block">Confirmar tom:</span>
-       <div class="seg" id="segDepth" role="group" aria-label="Profundidade"></div>
-       <div class="seg" id="segTone" role="group" aria-label="Subtom"></div></div>
+      <div class="noprint skinctl">
+       <p class="sub">Intensidade da pele</p>
+       <div class="seg" id="segDepth" role="group" aria-label="Intensidade da pele"></div>
+       <p class="sub">Subtom da pele <span>(o fundo de cor da pele)</span></p>
+       <div class="seg" id="segTone" role="group" aria-label="Subtom da pele"></div>
+       <p class="note" id="toneHelp"></p>
+       <details class="how2"><summary>Como confirmar o subtom?</summary>
+        <p>Olhe as veias do pulso à luz natural: <b>azuladas ou arroxeadas</b> indicam subtom frio, <b>esverdeadas</b> indicam quente, e as duas misturadas indicam neutro.</p>
+        <p>Outro teste: o <b>prata</b> valoriza mais a pele fria, e o <b>dourado</b> valoriza mais a pele quente. Se os dois ficam bem, o subtom é neutro.</p>
+       </details>
+       <p class="note">O subtom serve para escolher a <b>cor da armação</b> que valoriza a pele: frio combina com prata, preto e azul; quente combina com havana, dourado e verde.</p>
+      </div>
       <p style="margin-top:8px"><b style="color:var(--ink)">Cores de armação que valorizam:</b></p>
       <div class="pal" id="rPal"></div>
       <p id="rPalTxt"></p>
@@ -294,7 +307,7 @@ footer a{display:inline-flex;align-items:center;min-height:44px}
 </section>
 </main>
 
-<footer><div class="wrap"><div class="row2"><span>Ótica Pontes · São Caetano do Sul</span><span>Ótica Pontes · CNPJ 26.025.830/0001-67</span><a href="/privacidade">Política de privacidade</a><a href="#" data-cookies>Cookies</a></div></div></footer>
+<footer><div class="wrap"><div class="row2"><span>Ótica Pontes · São Caetano do Sul</span><span>Ótica Pontes · CNPJ 26.025.830/0001-67</span><a href="/privacidade">Política de privacidade</a><a href="#" data-cookies>Cookies</a><span style="opacity:.55;font-size:12px">v4</span></div></div></footer>
 
 <script>
 (function(){
@@ -585,19 +598,28 @@ function renderSnap(){
   var c=$("snap");c.width=Math.round(ww);c.height=Math.round(hh);c.getContext("2d").drawImage(src,x0,y0,ww,hh,0,0,ww,hh);
 }
 function shapeSVG(k){
-  /* lente esquerda dentro de x 8..44, y 6..35; a direita é o espelho. ex/ey = ponto onde a ponte encosta */
+  /* aro (preenchido) + lente translúcida + ponte com plaquetas + hastes. Lente esquerda: x 13..49; direita = espelho em x=60 */
   var D={
-   redondo:{l:'<circle cx="27" cy="20" r="15"/>',ex:41,ey:15},
-   oval:{l:'<ellipse cx="27" cy="20" rx="18" ry="13"/>',ex:43.5,ey:15},
-   quadrado:{l:'<rect x="9" y="8" width="34" height="27" rx="5"/>',ex:43,ey:15},
-   retangular:{l:'<rect x="9" y="11" width="34" height="21" rx="4"/>',ex:43,ey:16},
-   aviador:{l:'<path d="M13 9H42C43 22 37 33 27 33S11 23 10 12C10 10 11 9 13 9Z"/>',ex:42,ey:13},
-   gatinho:{l:'<path d="M8 8 40 12C43 12.500 44 14.500 43 18 41 28 34 34 24 33 14 32 10 25 8 8Z"/>',ex:42,ey:14},
-   clubmaster:{l:'<path d="M8 10H44" stroke-width="6"/><path d="M10.500 12C11 26 17 33 27 33S42 26 42.500 12"/>',ex:43,ey:11},
-   hexagonal:{l:'<path d="M17 8H37L45 20 37 32H17L9 20Z"/>',ex:41,ey:14}
+   redondo:'<circle cx="31" cy="22" r="14"/>',
+   oval:'<ellipse cx="31" cy="22" rx="17" ry="12.500"/>',
+   quadrado:'<rect x="14" y="9" width="34" height="26" rx="4.500"/>',
+   retangular:'<rect x="14" y="12" width="34" height="20" rx="3.500"/>',
+   aviador:'<path d="M15 11H47C48 24 41 34 31 34S14 24 14 14C14 12 14.500 11 15 11Z"/>',
+   gatinho:'<path d="M13 11 46 14C48 14.500 48.500 16 48 19 46 28 40 34 30 33 20 32 15 25 13 11Z"/>',
+   clubmaster:'<path d="M15 12H47C47 25 41 33 31 33S15 25 15 12Z"/>',
+   hexagonal:'<path d="M20 9H42L49 22 42 35H20L13 22Z"/>'
   }[k];if(!D)return'';
-  var side='<g fill="currentColor" fill-opacity=".05">'+D.l+'</g><path d="M9 13 3 11"/>';
-  return'<svg viewBox="0 0 100 40" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><g>'+side+'</g><g transform="translate(100 0) scale(-1 1)">'+side+'</g><path d="M'+D.ex+' '+D.ey+'Q50 '+(D.ey-6)+' '+(100-D.ex)+' '+D.ey+'"/></svg>';
+  var left;
+  if(k==="clubmaster"){
+    left='<g class="lens" stroke="none">'+D+'</g><g fill="none" stroke="currentColor" stroke-width="2.200" stroke-linejoin="round">'+D+'</g><path d="M12 8H50C51.500 8 52 9.500 51 11.500L49.500 15H13.500L12 11Z" fill="currentColor"/>';
+  }else{
+    left='<g class="lens" stroke="none">'+D+'</g><g fill="none" stroke="currentColor" stroke-width="4.200" stroke-linejoin="round">'+D+'</g>';
+  }
+  var hl='<path d="M20 18 25.500 13.500" stroke="#fff" stroke-opacity=".75" stroke-width="1.800" stroke-linecap="round"/>';
+  var hinge='<path d="M14 15 3 12.500" stroke="currentColor" stroke-width="3.400" stroke-linecap="round"/>';
+  var side=left+hl+hinge;
+  var br='<path d="M49 16.500C54 12.500 66 12.500 71 16.500V19.500C66 16.500 54 16.500 49 19.500Z" fill="currentColor"/><ellipse cx="53.500" cy="26" rx="1.500" ry="3" fill="currentColor" fill-opacity=".55" transform="rotate(-14 53.500 26)"/><ellipse cx="66.500" cy="26" rx="1.500" ry="3" fill="currentColor" fill-opacity=".55" transform="rotate(14 66.500 26)"/>';
+  return'<svg viewBox="0 0 120 44" aria-hidden="true"><g>'+side+'</g><g transform="translate(120 0) scale(-1 1)">'+side+'</g>'+br+'</svg>';
 }
 function renderShapes(){
   var S_=SHAPES[R.shape];
@@ -639,6 +661,7 @@ function renderSkin(){
   function seg(id,opts,cur,fn){$(id).innerHTML=opts.map(function(o){return'<button type="button" data-v="'+o[0]+'" aria-pressed="'+(cur===o[0])+'">'+o[1]+'</button>'}).join("");$(id).onclick=function(e){var b=e.target.closest("button[data-v]");if(!b)return;fn(b.getAttribute("data-v"))}}
   seg("segDepth",[["claro","Claro"],["medio","Médio"],["escuro","Escuro"]],userDepth,function(v){userDepth=v;renderSkin();renderFrames()});
   seg("segTone",[["frio","Frio"],["neutro","Neutro"],["quente","Quente"]],userTone,function(v){userTone=v;renderSkin();renderFrames()});
+  $("toneHelp").textContent={frio:"Frio: a pele puxa para o rosado ou azulado.",neutro:"Neutro: a pele tem um equilíbrio entre rosado e dourado.",quente:"Quente: a pele puxa para o dourado ou amarelado."}[userTone];
   $("rPal").innerHTML=PAL[userTone].map(function(k){var c=CNAME[k];return'<div class="chip"><i style="background:'+c.h+'"></i>'+c.n+'</div>'}).join("");
   $("rPalTxt").textContent=TONETXT[userTone]+" "+DEPTHTXT[userDepth];
 }
